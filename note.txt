@@ -1,0 +1,33 @@
+vector
+	增长为二倍增长
+	capacity函数可以看到目前的容量大小
+	
+list
+	list为双向链表
+	forward_list为单向链表   //C++11
+	
+	#include<ext\slist>下的slist跟
+	forward_list一模一样
+	
+	slist为GNU C中的
+	每放一个数据就开辟一个元素大小的空间
+
+	forward_list没有push_pack(),
+	只有push_front();
+	
+deque
+	由一个个buffer构成，分段连续，
+	每次增长一个buffer大小的空间
+	
+stack
+	内部使用deque实现
+queue
+	内部使用deque实现
+	
+unordered_multiset
+unordered_multimap
+	bucket一定比元素多
+
+unordered_multimap
+	不能使用c[i]=value的方法插入value,
+	map、multimap可以
