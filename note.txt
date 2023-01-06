@@ -31,3 +31,10 @@ unordered_multimap
 unordered_multimap
 	不能使用c[i]=value的方法插入value,
 	map、multimap可以
+
+BC++、VC++和GCC的allocator内部
+	只用operator new和operator delete完成
+	allocate()和deallocate(), 没有特殊设计 
+	GCC2.9的alloc使用了较少的cookie, 使用方法:
+	vector< Type, __gnu_cxx::__pool_alloc<Type>>
+	
