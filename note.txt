@@ -15,6 +15,38 @@ list
 	forward_list没有push_pack(),
 	只有push_front();
 	
+	刻意在环状list尾端加一个空白节点, 以符合STL
+	“前闭后开”区间
+	
+	iterator
+		struct _List_node_base{
+			_List_node_base* _M_next;
+			_List_node_base* _M_prev;
+		};
+		template< typename _Tp>
+		struct _List_node : public _List_node_base{
+			_Tp _M_data;
+		};
+		template< typename _Tp, typename _Alloc = std::allocator<_Tp>>
+		class list : protected _List_base< _Tp, _Alloc>{
+		.....
+		public:
+			typedef __list_iterator< _Tp> iterator;
+		.....
+		};
+		所有容器的iterator都要有下面5个typedef
+		template< typename _Tp>
+		struct __list_iterator {
+			typedef __list_iterator< typename _Tp> self;
+			typedef __list_node<_Tp>* link_type;
+			typedef bidirectional_iterator_tag iterator_category;	//1
+			typedef _Tp value_type;	//2
+			typedef _Tp* pointer;	//3
+			typedef _Tp& reference;	//4
+			typedef ptrdiff_t difference_type;	//5
+		.....
+		};
+	 
 deque
 	由一个个buffer构成，分段连续，
 	每次增长一个buffer大小的空间
@@ -37,4 +69,16 @@ BC++、VC++和GCC的allocator内部
 	allocate()和deallocate(), 没有特殊设计 
 	GCC2.9的alloc使用了较少的cookie, 使用方法:
 	vector< Type, __gnu_cxx::__pool_alloc<Type>>
+	
+Algorithm
+	Algorithm看不见Containers, 对其一无所知;
+	它所需要的一切信息都要通过Iterator获得,
+	而Iterator(由Containers提供)必须能够
+	回答Algorithm的所有提问, 才能搭配该
+	Algorithm的所有操作。 
+
+杂记
+	除了array和vector以外, 所有容器的iterator
+	都是class
+	所有容器内的元素都是前闭后开区间内
 	
