@@ -77,8 +77,37 @@ Algorithm
 	回答Algorithm的所有提问, 才能搭配该
 	Algorithm的所有操作。 
 
+Iterator需要遵循的原则:
+	iterator是泛化的指针
+	
+	Iterator Traits必须有能力分辨class iterators和non-class iterators
+	利用partial specialization可达到目标
+		template<class I>
+		struct iterator_traits {	//I是class iterator时
+			typedef typename I::value_type value_type;	
+		};
+		//两个partial specialization:
+		template<class T>
+		struct iterator_traits<T*> {	//I是pointer to T时
+			typedef T value_type;
+		};
+		template <class T>
+		struct iterator_traits<const T*>{	//I是pointer to const T时
+			typedef T value_type;	//注意是T而不是const T
+			//value_type的主要目的是用来声明变量, 声明一个无法被赋值的
+			//变量没有什么用, 所以iterator的value type不加上const
+		};
+		template<typename I, ...>
+		void algorithm(...){
+			typename iterator_traits<I>::value_type v1;
+		}
+	
+	算法提出问题, iterator需要回答问题, 标准库有5种问题(4,5没出现过):
+		1.category	2.distance	3.valueType
+		4.reference	5.pointer
+	
 杂记
 	除了array和vector以外, 所有容器的iterator
-	都是class
+	都是class  
 	所有容器内的元素都是前闭后开区间内
 	
