@@ -141,6 +141,41 @@ struct __deque_iterator {
 	.....
 }
 ```
+```cpp
+//在position处安插一个元素, 值为x
+iterator insert( iterator position, const value_type& x){
+	if( position.cur == start.cur ){	//如果插入点是deque的最前端, 
+						//则直接交给push_front()做
+		push_front(x);
+		return start;
+	} else if( position.cur == finish.cur){//如果插入点是deque的最末端, 
+						//则直接交给push_back()做
+		push_back(x);
+		iterator tmp = finish;
+		--tmp;
+		return tmp;
+	} else {	//在中间
+		return insert_aux( position, x);
+	}
+}
+template< class T, class Alloc, size_t BufSize>
+typename deque< T, Alloc, BufSize>::iterator
+deque< T, Alloc, BufSize>::iterator_aux( iterator pos, const value_type& x){
+	difference_type index = pos - start;	//安插点前的元素个数
+	value_type x_copy = x;
+	if( index < size() / 2){	//如果安插点之前的元素个数较少
+		push_front( front());		//如果在最前端加入与第一元素同值得元素
+		.....
+		copy( front2, pos1, front1);	//元素搬移得以空出一个位置给新值
+	} else {		//安插点之后得元素个数较少
+		push_back( back());		//在尾端加入与最后一个元素同值的元素
+		.....
+		copy_backward( pos, back2, back1);	//元素搬移得以空出一个位置给新值
+	}
+	*pos = x_copy;		//在安插点上设定新值
+	return pos;
+}
+```
 
 ## stack
 ```cpp
