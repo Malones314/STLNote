@@ -176,6 +176,25 @@ deque< T, Alloc, BufSize>::iterator_aux( iterator pos, const value_type& x){
 	return pos;
 }
 ```
+```cpp
+reference operator[](size_type n){
+	return start[ difference_type(n)];
+}
+reference front(){
+	return *start;
+}
+regerence back(){
+	iterator temp = finish;
+	--tmp;	//因为finish指向最后一个元素的下一个位置
+	return *tmp;
+}
+size_type size() const{
+	return finish-start;	//-做了重载
+}
+bool empty() const{
+	return finish == start;
+}
+```
 
 ## stack
 ```cpp
