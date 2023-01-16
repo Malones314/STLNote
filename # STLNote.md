@@ -79,7 +79,9 @@ forward_list 没有 push_pack() ,只有 push_front()
 由一个个buffer构成，分段连续, 每次增长一个buffer大小的空间,
 buffer内连续, buffer分段不连续
 
-内部有一个vector, vector内的元素为指向buffer的指针
+内部有一个vector, vector内的元素为指向buffer的指针, 当vector需要扩充时,
+是扩充为两倍, 把原来的放到值copy到中段, 可以向前和向后使用vector空间
+
 如果push_back( a)把所在buffer空间用完, 则新分配一个缓冲区, 把指向其的
 指针放到vector中, 往前扩充同理
 
@@ -95,6 +97,7 @@ tenmplate < class T, class Alloc = alloc, size_t BufSiz = 0>
 			//BufSize是指每个buffer容纳的元素个数, 
 			//如果传的不是0, 则表示buffer size由使用者自定
 			//如果为0，则表示buffer size使用预设值
+			//新版本已经不能指定了
 	/*计算要使用的buffer size预设值
 		inline size_t __deque_buf_size( size_t n, size_t sz){
 				//sz为sizeof(value_type)
@@ -196,13 +199,12 @@ bool empty() const{
 }
 ```
 
-## stack
+## stack / queue
 ```cpp
-内部使用deque实现
-```
-## queue
-```cpp
-内部使用deque实现
+内部使用deque实现, 不提供iterator, 不能遍历
+queue不能用vector做底层结构, stack可以用vector做底层结构, 因为vector不能
+return front
+
 ```
 ## map/set	
 1. #### unordered_multiset / unordered_multimap
