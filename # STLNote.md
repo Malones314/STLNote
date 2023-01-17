@@ -206,6 +206,17 @@ queue不能用vector做底层结构, stack可以用vector做底层结构, 因为
 return front
 
 ```
+## rb_tree
+```cpp
+rb_tree的遍历是中序遍历, 不应该使用iterator改变元素的值(但没有阻止更改),
+rb_tree为map和set服务, map可以改变data, key不可改
+
+rb_tree提供两种insertion操作: insert_unique()和insert_equal()
+前者表示key独一无二, 否则插入失败
+后者表示key可以重复
+
+
+```
 ## map/set	
 1. #### unordered_multiset / unordered_multimap
 ```cpp
@@ -305,5 +316,6 @@ void algorithm(...){
 ```cpp
 除了array和vector以外, 所有容器的iterator都是class  
 所有容器内的元素都是前闭后开区间内
+
 ```
  
