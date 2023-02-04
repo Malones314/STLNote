@@ -212,10 +212,61 @@ rb_tree的遍历是中序遍历, 不应该使用iterator改变元素的值(但�
 rb_tree为map和set服务, map可以改变data, key不可改
 
 rb_tree提供两种insertion操作: insert_unique()和insert_equal()
-前者表示key独一无二, 否则插入失败
-后者表示key可以重复
+前者表示key独一无二, 否则插入失败，后者表示key可以重复
+```
+```cpp
+template< class Key,	//关键字
+	class Value,	//关键字和data的组合, 而非data
+	class KeyOfValue,	//value中的关键字怎么拿出来
+	class Compare,	//关键字的比较方式
+	class Alloc = alloc>	//分配器
+class rb_tree {
+protected:
+	typedef __rb_tree_node<Value> rb_tree_node;
+	.....
+public:
+	typedef rb_tree_node* link_type;
+	.....
+protected:
+	//红黑树只用以下三个参数表现他自己
+	size_type node_count;	//记录红黑树节点个数
+	link_type header;
+	Compare key_compare;	//key的大小比较准则, 可能是个function object
+	.....
+};
+```
+```cpp
+//使用实例：
+rb_tree< int,	//key的类型
+	int,	//value的类型, 此时代表只有key没有data
+	identity<int>,	//如何取得key, 因为此时value中只有key, 所以直接返回key
+	less<int>,	//key的比较方式
+	alloc>	
+myTree;
 
-
+template < class Arg, class Result>
+struct unary_function{
+	typedef Arg argument_type;
+	typedef Result result_type;
+};
+template< class T>
+struct identity: public unary_function< T, T> {
+	const T& operator() ( const T& x) const {
+		return x;
+	}
+};
+template < class Arg1, class Arg2, class Result>
+struct binary_function{
+	typedef Arg1 first_argument_type;
+	typedef Arg2 second_argument_type;
+	typedef Result result_type;
+};
+template <class T>
+struct less: public binary_function< T, T, bool>{
+	bool operator()( const T&x, const T& y) const{
+		return x < y;
+	}
+};
 ```
 ## map/set	
 1. #### unordered_multiset / unordered_multimap
