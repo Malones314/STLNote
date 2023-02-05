@@ -1,11 +1,10 @@
-# STLNote
-## array
+# array
 ```cpp
 就是数组, 包装后让其可以享受算法等部件的交互array没有ctor、dtor
 array的iterator就是一个指针
 ```
 
-## vector
+# vector
 ```cpp
 增长为二倍增长, capacity函数可以看到目前的容量大小
 
@@ -61,7 +60,7 @@ vector两倍增长后:
 	删除原来的vector
 	调整迭代器指向新vector
 ```
-## list
+# list
 ```cpp
 list 为双向链表
 forward_list 为单向链表   //C++11
@@ -74,7 +73,7 @@ forward_list 没有 push_pack() ,只有 push_front()
 
 刻意在环状 list 尾端加一个空白节点, 以符合STL“前闭后开”区间
 ```
-## deque
+# deque
 ```cpp
 由一个个buffer构成，分段连续, 每次增长一个buffer大小的空间,
 buffer内连续, buffer分段不连续
@@ -199,14 +198,14 @@ bool empty() const{
 }
 ```
 
-## stack / queue
+# stack / queue
 ```cpp
 内部使用deque实现, 不提供iterator, 不能遍历
 queue不能用vector做底层结构, stack可以用vector做底层结构, 因为vector不能
 return front
 
 ```
-## rb_tree
+# rb_tree
 ```cpp
 rb_tree的遍历是中序遍历, 不应该使用iterator改变元素的值(但没有阻止更改),
 rb_tree为map和set服务, map可以改变data, key不可改
@@ -268,16 +267,38 @@ struct less: public binary_function< T, T, bool>{
 	}
 };
 ```
-## map/set	
+# map/set	
 1. #### unordered_multiset / unordered_multimap
 ```cpp
-	bucket一定比元素多
+bucket一定比元素多
 ```
 2. #### unordered_multimap
 ```cpp
 不能使用 c[i] = value 的方法插入 value, map、multimap可以
 ```
-## BC++、VC++和GCC的allocator
+#### set/multiset
+```cpp
+rb-tree为底层, 元素有自动排序的特性, 排序的依据是key, value和key合而为一, 
+key就是value, 无法使用其iterators改变元素值( 因为key有其遵循的排列规则)
+其iterator是底部rb-tree的const iterator, 就是为了禁止user对元素的赋值
+
+set元素的key必须独一无二, 因此其insert()用的是rb_tree的insert_unique()
+multiset元素的key可以重复, 因此其insert()用的是rb_tree的insert_equal()
+```
+#### map/multimap
+```cpp
+把key变成const key, 和set差不多, 只不过value中有data
+map重载了[]操作符, 可以通过[key]来更改data的值( 使用lower_bound(key)来查
+找key的位置)
+
+lower_bound(key): 在已排序的[first, last)中找到key, 如果有key则返回找到的
+第一个值为key的元素位置, 如果没有则返回第一个不小于key的元素, 如果key大于所
+有元素, 则返回last
+lower_bound(key)返回key的位置或者最适合安插key的位置
+
+使用[]做插入比直接使用insert()插入更慢
+```
+# BC++、VC++和GCC的allocator
 ```cpp
 只用operator new和operator delete完成allocate()和deallocate(), 
 没有特殊设计 
@@ -285,13 +306,13 @@ struct less: public binary_function< T, T, bool>{
 GCC2.9的alloc使用了较少的cookie, 使用方法:
 vector< Type, __gnu_cxx::__pool_alloc<Type>>
 ```	
-## Algorithm
+# Algorithm
 ```cpp
 Algorithm看不见Containers, 对其一无所知; 它所需要的一切信息都要通过Iterator
 获得,而Iterator(由Containers提供)必须能够回答Algorithm的所有提问, 才能搭配该
 Algorithm的所有操作。 
 ```
-## Iterator
+# Iterator
 ```cpp
 vector<int> iterator :: vi;
 ```
@@ -363,7 +384,8 @@ void algorithm(...){
     指的是两个iterator之间距离的类型
 ###### 3.value_type
     指的是变量的类型
-## 杂记
+
+# 杂记
 ```cpp
 除了array和vector以外, 所有容器的iterator都是class  
 所有容器内的元素都是前闭后开区间内
