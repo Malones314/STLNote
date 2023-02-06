@@ -298,6 +298,43 @@ lower_bound(key)返回key的位置或者最适合安插key的位置
 
 使用[]做插入比直接使用insert()插入更慢
 ```
+# hashtable
+```cpp
+可以使用hashtable iterators改变元素的data而不能改变key, hashtable使用key排序
+hashtable使用bucket vector, 如果元素个数比bucket多时, 把bucket数量增加两倍后
+附近的素数作为新的bucket数量
+```
+```cpp
+template< class Value, class Key, class HashFcn, class ExtractKey,
+	class EqualKey, class Alloc = alloc>
+class hashtable{
+public:
+	typedef HashFcn hasher;
+	typedef EqualKey key_equal;
+	typedef size_t size_type;
+private:
+	hasher hash;
+	key_equal equals;
+	ExtractKey get_key;
+	typedef __hashtable_node<Value> node;
+	vector< node*, Alloc> buckets;
+	size_type num_elements;
+public:
+	size_type bucket_count() const {
+		return buckets.size();
+	}
+.....
+};
+```
+```cpp
+template< class Value, class Key, class HashFcn, class ExtractKey, class EqualKey,
+	class Alloc>
+struct __hashtable_iterator{
+	.....
+	node* cur;
+	hashtable* ht;
+};
+```
 # BC++、VC++和GCC的allocator
 ```cpp
 只用operator new和operator delete完成allocate()和deallocate(), 
