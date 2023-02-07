@@ -268,14 +268,6 @@ struct less: public binary_function< T, T, bool>{
 };
 ```
 # map/set	
-1. #### unordered_multiset / unordered_multimap
-```cpp
-bucket一定比元素多
-```
-2. #### unordered_multimap
-```cpp
-不能使用 c[i] = value 的方法插入 value, map、multimap可以
-```
 #### set/multiset
 ```cpp
 rb-tree为底层, 元素有自动排序的特性, 排序的依据是key, value和key合而为一, 
@@ -298,6 +290,31 @@ lower_bound(key)返回key的位置或者最适合安插key的位置
 
 使用[]做插入比直接使用insert()插入更慢
 ```
+#### unordered容器
+```cpp
+unordered_map、unordered_set、unordered_multimap、unordered_multiset底层用hashtable实现
+```
+```cpp
+template <typename T, typename Hash = hash<T>,
+	typename EqPred = equal_to<T>, typename Allocator = allocator<T>>
+class unordered_set;
+```
+```cpp
+template <typename T, typename Hash = hash<T>,
+	typename EqPred = equal_to<T>, typename Allocator = allocator<T>>
+class unordered_multiset;
+```
+```cpp
+template <typename Key, typename T, typename Hash = hash<T>,
+	typename EqPred = equal_to<T>,
+	typename Allocator = allocator<pair<const Key, T> > >
+class unordered_map;
+```
+```cpp
+template <typename Key, typename T, typename Hash = hash<T>,
+	typename EqPred = equal_to<T>,
+	typename Allocator = allocator<pair<const Key, T> > >
+class unordered_multimap;```
 # hashtable
 ```cpp
 可以使用hashtable iterators改变元素的data而不能改变key, hashtable使用key排序
@@ -307,6 +324,7 @@ hashtable使用bucket vector, 如果元素个数比bucket多时, 把bucket数量
 ```cpp
 template< class Value, class Key, class HashFcn, class ExtractKey,
 	class EqualKey, class Alloc = alloc>
+	//EqualKey为比较方式(可为仿函数)
 class hashtable{
 public:
 	typedef HashFcn hasher;
@@ -334,6 +352,20 @@ struct __hashtable_iterator{
 	node* cur;
 	hashtable* ht;
 };
+```
+```cpp
+//实例
+struct eqstr{
+	bool operator()( const char* s1, const char* s2) const{
+		return strcmp( s1, s2) == 0;	
+	}
+};
+//比较两个c-string是否相等可以用strcmp(), 但是它传回-1,0,1,不是传回bool，
+//所以必须要加一个外壳
+hashtable<const char*, const char*, hash<const char*>,
+	identity<const char*>,
+	eqstr, akkic> ht( 50, hash<const char*>(), eqstr());
+
 ```
 # BC++、VC++和GCC的allocator
 ```cpp
