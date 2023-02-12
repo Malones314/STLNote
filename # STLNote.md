@@ -1,11 +1,11 @@
 # array
-```cpp
+ ```cpp
 就是数组, 包装后让其可以享受算法等部件的交互array没有ctor、dtor
 array的iterator就是一个指针
-```
+ ```
 
 # vector
-```cpp
+ ```cpp
 增长为二倍增长, capacity函数可以看到目前的容量大小
 
 vector内部只有三个protected的指针: start, finish, end_of_storage
@@ -15,8 +15,8 @@ sizeof一个vector大小为3个指针的大小
 finish-start为size, end_of_storage-start为capacity
 
 使用vector时会大量调用构造函数, 复制构造函数, 析构函数, 是很大的开销
-```
-```Cpp{.line-numbers}
+ ```
+ ```Cpp{.line-numbers}
 template < class T , class Alloc = alloc>
 class vector {
 public:
@@ -46,8 +46,8 @@ public:
     reference front() { return *begin(); }
     reference back() { return *( end() - 1 ); }
 };
-```
-```cpp
+ ```
+ ```cpp
 vector两倍增长后:
 	try{
 		1.将原来的内容拷贝到新的vector中
@@ -59,22 +59,22 @@ vector两倍增长后:
 	}
 	删除原来的vector
 	调整迭代器指向新vector
-```
+ ```
 # list
-```cpp
+ ```cpp
 list 为双向链表
 forward_list 为单向链表   //C++11
 
-#include<ext\slist> 下的 slist 跟 forward_list 一模一样
+ #include<ext\slist> 下的 slist 跟 forward_list 一模一样
 
 slist 为 GNU C 中的每放一个数据就开辟一个元素大小的空间
 
 forward_list 没有 push_pack() ,只有 push_front()
 
 刻意在环状 list 尾端加一个空白节点, 以符合STL“前闭后开”区间
-```
+ ```
 # deque
-```cpp
+ ```cpp
 由一个个buffer构成，分段连续, 每次增长一个buffer大小的空间,
 buffer内连续, buffer分段不连续
 
@@ -89,9 +89,9 @@ first指向buffer头( 不是buffer内放的第一个元素)
 last指向buffer尾( 不是buffer内放的最后一个元素)
 cur指向buffer内的当前元素
 node指向vector中当前buffer的地址
-```
+ ```
 
-```cpp{.line-numbers}
+ ```cpp{.line-numbers}
 tenmplate < class T, class Alloc = alloc, size_t BufSiz = 0>
 			//BufSize是指每个buffer容纳的元素个数, 
 			//如果传的不是0, 则表示buffer size由使用者自定
@@ -122,8 +122,8 @@ public:
 	size_type size() const {	return finish - start;	}
 .....
 };
-```
-```cpp{highlight=3-7, .line-numbers}
+ ```
+ ```cpp{highlight=3-7, .line-numbers}
 template< class T, class Ref, class Ptr, size_t BufSize>
 struct __deque_iterator {
 	typedef bidirectional_iterator_tag iterator_category;	
@@ -142,8 +142,8 @@ struct __deque_iterator {
 	//故一个iterator大小为4个指针的大小
 	.....
 }
-```
-```cpp
+ ```
+ ```cpp
 //在position处安插一个元素, 值为x
 iterator insert( iterator position, const value_type& x){
 	if( position.cur == start.cur ){	//如果插入点是deque的最前端, 
@@ -177,8 +177,8 @@ deque< T, Alloc, BufSize>::iterator_aux( iterator pos, const value_type& x){
 	*pos = x_copy;		//在安插点上设定新值
 	return pos;
 }
-```
-```cpp
+ ```
+ ```cpp
 reference operator[](size_type n){
 	return start[ difference_type(n)];
 }
@@ -196,10 +196,10 @@ size_type size() const{
 bool empty() const{
 	return finish == start;
 }
-```
+ ```
 
 # stack / queue
-```cpp
+ ```cpp
 内部使用deque实现, 不提供iterator, 不能遍历
 queue不能用vector做底层结构, stack可以用vector做底层结构, 因为vector不能
 return front
@@ -212,8 +212,8 @@ rb_tree为map和set服务, map可以改变data, key不可改
 
 rb_tree提供两种insertion操作: insert_unique()和insert_equal()
 前者表示key独一无二, 否则插入失败，后者表示key可以重复
-```
-```cpp
+ ```
+ ```cpp
 template< class Key,	//关键字
 	class Value,	//关键字和data的组合, 而非data
 	class KeyOfValue,	//value中的关键字怎么拿出来
@@ -233,8 +233,8 @@ protected:
 	Compare key_compare;	//key的大小比较准则, 可能是个function object
 	.....
 };
-```
-```cpp
+ ```
+ ```cpp
 //使用实例：
 rb_tree< int,	//key的类型
 	int,	//value的类型, 此时代表只有key没有data
@@ -266,19 +266,19 @@ struct less: public binary_function< T, T, bool>{
 		return x < y;
 	}
 };
-```
+ ```
 # map/set	
 #### set/multiset
-```cpp
+ ```cpp
 rb-tree为底层, 元素有自动排序的特性, 排序的依据是key, value和key合而为一, 
 key就是value, 无法使用其iterators改变元素值( 因为key有其遵循的排列规则)
 其iterator是底部rb-tree的const iterator, 就是为了禁止user对元素的赋值
 
 set元素的key必须独一无二, 因此其insert()用的是rb_tree的insert_unique()
 multiset元素的key可以重复, 因此其insert()用的是rb_tree的insert_equal()
-```
+ ```
 #### map/multimap
-```cpp
+ ```cpp
 把key变成const key, 和set差不多, 只不过value中有data
 map重载了[]操作符, 可以通过[key]来更改data的值( 使用lower_bound(key)来查
 找key的位置)
@@ -289,39 +289,40 @@ lower_bound(key): 在已排序的[first, last)中找到key, 如果有key则返�
 lower_bound(key)返回key的位置或者最适合安插key的位置
 
 使用[]做插入比直接使用insert()插入更慢
-```
+ ```
 #### unordered容器
-```cpp
+ ```cpp
 unordered_map、unordered_set、unordered_multimap、unordered_multiset底层用hashtable实现
-```
-```cpp
+ ```
+ ```cpp
 template <typename T, typename Hash = hash<T>,
 	typename EqPred = equal_to<T>, typename Allocator = allocator<T>>
 class unordered_set;
-```
-```cpp
+ ```
+ ```cpp
 template <typename T, typename Hash = hash<T>,
 	typename EqPred = equal_to<T>, typename Allocator = allocator<T>>
 class unordered_multiset;
-```
-```cpp
+ ```
+ ```cpp
 template <typename Key, typename T, typename Hash = hash<T>,
 	typename EqPred = equal_to<T>,
 	typename Allocator = allocator<pair<const Key, T> > >
 class unordered_map;
-```
-```cpp
+ ```
+ ```cpp
 template <typename Key, typename T, typename Hash = hash<T>,
 	typename EqPred = equal_to<T>,
 	typename Allocator = allocator<pair<const Key, T> > >
-class unordered_multimap;```
+class unordered_multimap;
+ ```
 # hashtable
-```cpp
+ ```cpp
 可以使用hashtable iterators改变元素的data而不能改变key, hashtable使用key排序
 hashtable使用bucket vector, 如果元素个数比bucket多时, 把bucket数量增加两倍后
 附近的素数作为新的bucket数量
-```
-```cpp
+ ```
+ ```cpp
 template< class Value, class Key, class HashFcn, class ExtractKey,
 	class EqualKey, class Alloc = alloc>
 	//EqualKey为比较方式(可为仿函数)
@@ -343,8 +344,8 @@ public:
 	}
 .....
 };
-```
-```cpp
+ ```
+ ```cpp
 template< class Value, class Key, class HashFcn, class ExtractKey, class EqualKey,
 	class Alloc>
 struct __hashtable_iterator{
@@ -352,8 +353,8 @@ struct __hashtable_iterator{
 	node* cur;
 	hashtable* ht;
 };
-```
-```cpp
+ ```
+ ```cpp
 //实例
 struct eqstr{
 	bool operator()( const char* s1, const char* s2) const{
@@ -366,26 +367,26 @@ hashtable<const char*, const char*, hash<const char*>,
 	identity<const char*>,
 	eqstr, akkic> ht( 50, hash<const char*>(), eqstr());
 
-```
+ ```
 # BC++、VC++和GCC的allocator
-```cpp
+ ```cpp
 只用operator new和operator delete完成allocate()和deallocate(), 
 没有特殊设计 
 
 GCC2.9的alloc使用了较少的cookie, 使用方法:
 vector< Type, __gnu_cxx::__pool_alloc<Type>>
-```	
+ ```	
 # Algorithm
-```cpp
+ ```cpp
 Algorithm看不见Containers, 对其一无所知; 它所需要的一切信息都要通过Iterator
 获得,而Iterator(由Containers提供)必须能够回答Algorithm的所有提问, 才能搭配该
 Algorithm的所有操作。 
-```
+ ```
 # Iterator
-```cpp
+ ```cpp
 vector<int> iterator :: vi;
-```
-```Cpp{.line-numbers,highlight=21-25}		
+ ```
+ ```Cpp{.line-numbers,highlight=21-25}		
 	struct _List_node_base{
 		_List_node_base* _M_next;
 		_List_node_base* _M_prev;
@@ -413,14 +414,14 @@ vector<int> iterator :: vi;
 		typedef ptrdiff_t difference_type;	
 	.....
 	}; 
-```	
+ ```	
 #### Iterator需要遵循的原则:
 ##### iterator是泛化的指针	
-```cpp
+ ```cpp
 Iterator Traits必须有能力分辨class iterators和non-class iterators
 利用partial specialization可达到目标(不同的type有不同的traits)
-```
-```Cpp{.line-numbers}
+ ```
+ ```Cpp{.line-numbers}
 template<class I>
 struct iterator_traits {	//I是class iterator时
     typedef typename I::value_type value_type;	
@@ -442,11 +443,10 @@ template<typename I, ...>
 void algorithm(...){
     typename iterator_traits<I>::value_type v1;
 }
-```
+ ```
 ##### 算法提出问题, iterator需要回答问题, 标准库有5种问题(4,5没出现过):
-    1.iterator_category		2.difference_type 	3.value_type
-    4.reference_type		5.pointer_type
-    
+	1.iterator_category		2.difference_type 	3.value_type
+	4.reference_type		5.pointer_type
 ###### 1.iterator_category(分类):
     指的是Iterator的移动性质, 有的只能++, 有的只能--, 等等
 ###### 2.difference_type(距离):
@@ -454,10 +454,28 @@ void algorithm(...){
 ###### 3.value_type
     指的是变量的类型
 
+##### 各种容器的iterator的iterator_category
+ ```cpp
+//5种iterator category
+
+struct input_iterator_tag{};
+//基于顺序操作的iterator，iterator指向的每一个值都只读一次，然后iterator递增
+//只能向前递增,此iterator只在我们想要访问元素时使用，不能给元素赋值，不能递减
+//只能用==不能用<,>等关系运算，也不能用+-运算
+struct output_iterator_tag{};
+//不能访问值, 只能赋值
+struct forward_iterator_tag:public input_iterator_tag{};
+//只能走一个方向，单向的
+struct bidirectional_iterator_tag:public forward_iterator_tag{};
+//双向的，但是不能跳跃
+struct random_access_iterator_tag: public bidirectional_iterator_tag{};
+//随机可跳跃
+ ```
+
 # 杂记
-```cpp
+ ```cpp
 除了array和vector以外, 所有容器的iterator都是class  
 所有容器内的元素都是前闭后开区间内
 
-```
+ ```
  
