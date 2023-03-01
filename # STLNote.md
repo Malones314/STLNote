@@ -60,6 +60,37 @@ try{
 删除原来的vector
 调整迭代器指向新vector
  ```
+
+# bitset
+```cpp
+避免使⽤vector< bool >,⽤deque< bool >和bitset代替,因为vector并不容纳bool类型
+因为 vector<bool> 保存的是bits而不是bool,从而无法返回bool&
+std::bitset 的所有成员函数都是 constexpr：可以在常量表达式的计算中创建和使用 
+std::bitset 对象。
+```
+```cpp
+//因为不是保存bool类型，test传入vector<bool>出错
+template <class T>
+void process(T& t) {
+    // do something with t
+}
+template <class T, class A>
+void test(std::vector<T, A>& v) {
+    for (auto& t : v)
+		//error:error: invalid initialization of non-const reference of 
+		//type 'std::_Bit_reference&' from an rvalue of type 
+		//'std::_Bit_iterator::reference {aka std::_Bit_reference}'
+        process(t);
+}
+```
+```cpp
+template< std::size_t N> class bitset;
+bitset<size> bt;
+bt.all();	//检查是否所有位都是true
+bt.any();	//检查是否有true的位
+bt.none();	//检查是否没有为true的位
+bt.count();	//返回bt中为true的位数
+```
 # list
  ```cpp
 list 为双向链表
@@ -199,11 +230,9 @@ bool empty() const{
  ```
 
 # stack / queue
- ```cpp
+```cpp
 内部使用deque实现, 不提供iterator, 不能遍历
-queue不能用vector做底层结构, stack可以用vector做底层结构, 因为vector不能
-return front
-
+queue不能用vector做底层结构, stack可以用vector做底层结构, 因为vector不能return front
 ```
 # rb_tree
 ```cpp
@@ -268,7 +297,7 @@ struct less: public binary_function< T, T, bool>{
 };
  ```
 # map/set	
-#### set/multiset
+## set/multiset
  ```cpp
 rb-tree为底层, 元素有自动排序的特性, 排序的依据是key, value和key合而为一, 
 key就是value, 无法使用其iterators改变元素值( 因为key有其遵循的排列规则)
@@ -277,7 +306,7 @@ key就是value, 无法使用其iterators改变元素值( 因为key有其遵循�
 set元素的key必须独一无二, 因此其insert()用的是rb_tree的insert_unique()
 multiset元素的key可以重复, 因此其insert()用的是rb_tree的insert_equal()
  ```
-#### map/multimap
+## map/multimap
  ```cpp
 把key变成const key, 和set差不多, 只不过value中有data
 map重载了[]操作符, 可以通过[key]来更改data的值( 使用lower_bound(key)来查
@@ -290,7 +319,7 @@ lower_bound(key)返回key的位置或者最适合安插key的位置
 
 使用[]做插入比直接使用insert()插入更慢
  ```
-#### unordered容器
+## unordered容器
  ```cpp
 unordered_map、unordered_set、unordered_multimap、unordered_multiset底层用hashtable实现
  ```
@@ -415,8 +444,8 @@ vector<int> iterator :: vi;
 	.....
 	}; 
  ```	
-#### Iterator需要遵循的原则:
-##### iterator是泛化的指针	
+## Iterator需要遵循的原则:
+### iterator是泛化的指针	
  ```cpp
 Iterator Traits必须有能力分辨class iterators和non-class iterators
 利用partial specialization可达到目标(不同的type有不同的traits)
@@ -444,17 +473,17 @@ void algorithm(...){
     typename iterator_traits<I>::value_type v1;
 }
  ```
-##### 算法提出问题, iterator需要回答问题, 标准库有5种问题(4,5没出现过):
+### 算法提出问题, iterator需要回答问题, 标准库有5种问题(4,5没出现过):
 	1.iterator_category		2.difference_type 	3.value_type
 	4.reference_type		5.pointer_type
-###### 1.iterator_category(分类):
+#### 1.iterator_category(分类):
     指的是Iterator的移动性质, 有的只能++, 有的只能--, 等等
-###### 2.difference_type(距离):
+#### 2.difference_type(距离):
     指的是两个iterator之间距离的类型
-###### 3.value_type
+#### 3.value_type
     指的是变量的类型
 
-##### 各种容器的iterator的iterator_category
+### 各种容器的iterator的iterator_category
  ```cpp
 //5种iterator category
 
@@ -476,6 +505,8 @@ struct random_access_iterator_tag: public bidirectional_iterator_tag{};
  ```cpp
 除了array和vector以外, 所有容器的iterator都是class  
 所有容器内的元素都是前闭后开区间内
-
+ ``` 
+```cpp
+不同容器要用不同的删除方法：
+1.删除容器中有特定值的所有对象
  ```
- 
