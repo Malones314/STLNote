@@ -297,6 +297,10 @@ struct less: public binary_function< T, T, bool>{
 };
  ```
 # map/set	
+```cpp
+unordered_set<string> wordSet( wordDict.begin(), wordDict.end());
+	//wordDict是容器，上述语句把wordDict中所有元素放入wordSet中
+ ```
 ## set/multiset
  ```cpp
 rb-tree为底层, 元素有自动排序的特性, 排序的依据是key, value和key合而为一, 
