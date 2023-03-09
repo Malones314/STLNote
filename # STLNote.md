@@ -108,6 +108,7 @@ public:
     reference back() { return *( end() - 1 ); }
 };
  ```
+ 
  ```cpp
 vector两倍增长后:
 try{
