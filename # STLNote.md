@@ -1,13 +1,17 @@
 # array
- ```cpp
-就是数组, 包装后让其可以享受算法等部件的交互array没有ctor、dtor
-array的iterator就是一个指针
-编译器会对其进行优化，将其视为普通的C++数组
-大小固定：一旦创建了array，它的大小就不能更改。
-连续存储：array中的元素在内存中是连续存储的，可以通过指针算术运算快速访问元素。
-支持STL算法：array可以像其他容器一样使用STL算法。
-不支持插入和删除操作：由于array的大小固定，因此无法在其中插入或删除元素。
- ```
+
+就是数组, 包装后让其可以享受算法等部件的交互```array```没有ctor、dtor。
+
+```array```的```iterator```就是一个指针编译器会对其进行优化，将其视为普通的C++数组。
+
+大小固定：一旦创建了```array```，它的**大小就不能更改**。
+
+连续存储：```array```中的元素在内存中是连续存储的，可以通过指针算术运算快速访问元素。
+
+支持STL算法：```array```可以像其他容器一样使用STL算法。
+
+不支持插入和删除操作：由于```array```的大小固定，因此无法在其中插入或删除元素。
+
  ```cpp
 std::array<int, 5> arr = {1, 2, 3, 4, 5};
 
@@ -22,61 +26,39 @@ for (auto it = arr.begin(); it != arr.end(); ++it) {
  ```
 
 # vector
- ```cpp
-增长为二倍增长, capacity函数可以看到目前的容量大小
 
-vector内部只有三个protected的指针: start, finish, end_of_storage
+增长为二倍增长, ```capacity()```可以看到目前的容量大小
 
-sizeof一个vector大小为3个指针的大小
+```vector```内部只有三个```protected```的指针: ```start```, ```finish```, ```end_of_storage```
 
-finish-start为size, end_of_storage-start为capacity
+```sizeof```一个```vector```大小为3个指针的大小
 
-使用vector时会大量调用构造函数, 复制构造函数, 析构函数, 是很大的开销
+finish-start为```size```, end_of_storage-start为```capacity```
 
-vector是一个动态数组，其底层实现基于连续的内存空间。当向vector中添加元素时，如果
-当前vector的内存空间已满，就需要重新分配一块更大的内存空间，并将原有元素复制到新
-的内存空间中，然后再将新元素添加到vector中。
+使用```vector```时会大量调用构造函数, 复制构造函数, 析构函数, 是很大的开销
 
- ```
- ```cpp
-vector的底层实现主要涉及以下几个部分：
+```vector```是一个动态数组，其底层实现基于连续的内存空间。当向```vector```中添加元素时，如果当前```vector```的内存空间已满，就需要重新分配一块更大的内存空间，并将原有元素复制到新的内存空间中，然后再将新元素添加到```vector```中。
 
-数据存储：vector中的元素是按照一定的顺序存储在一块连续的内存空间中。vector的底层
-实现使用指针来维护该内存空间，指针指向该内存空间的首地址。
+```vector```的底层实现主要涉及以下几个部分：
 
-容量管理：vector内部维护了当前容量和已使用的空间大小，当需要添加元素时，如果当前
-已使用的空间大小等于容量，就需要重新分配一块更大的内存空间，并将原有元素复制到新
-的内存空间中，然后再将新元素添加到vector中。一般情况下，每次重新分配内存空间时，
-vector的容量会成倍增加，以减少频繁重新分配内存空间的开销。
+数据存储：```vector```中的元素是按照一定的顺序存储在一块连续的内存空间中。```vector```的底层实现使用指针来维护该内存空间，指针指向该内存空间的首地址。
 
-元素访问：vector的元素可以使用下标操作符[]访问，也可以使用迭代器进行访问。
+容量管理：```vector```内部维护了当前容量和已使用的空间大小，当需要添加元素时，如果当前已使用的空间大小等于容量，就需要重新分配一块更大的内存空间，并将原有元素复制到新的内存空间中，然后再将新元素添加到```vector```中。一般情况下，每次重新分配内存空间时，```vector```的容量会成倍增加，以减少频繁重新分配内存空间的开销。
 
-内存分配器：vector使用内存分配器来管理内存空间的分配和释放，内存分配器会根据具体
-的场景选择不同的策略，以提高内存分配效率和减少内存碎片。
- ```
+元素访问：```vector```的元素可以使用下标操作符[]访问，也可以使用迭代器进行访问。
 
- ```cpp
-内存管理：vector是动态数组，其底层实现基于连续的内存空间。当需要添加元素时，如果
-当前已分配的内存空间不足，vector会重新分配一块更大的内存空间，并将原有元素复制到
-新的内存空间中，然后再将新元素添加到vector中。因此，在大量添加元素的情况下，频繁
-的内存分配和拷贝会影响性能，可以通过预先分配足够的空间或使用reserve()函数来提高
-性能。
+内存分配器：```vector```使用内存分配器来管理内存空间的分配和释放，内存分配器会根据具体的场景选择不同的策略，以提高内存分配效率和减少内存碎片。
 
-迭代器失效：当vector中的元素发生增删操作时，迭代器可能会失效，因为这些操作会导致
-vector的内存地址和元素顺序发生变化。因此，在使用迭代器时，需要避免在修改vector时
-使用过期的迭代器，可以在每次修改vector之后重新获取迭代器。
+内存管理：```vector```是动态数组，其底层实现基于连续的内存空间。当需要添加元素时，如果当前已分配的内存空间不足，```vector```会重新分配一块更大的内存空间，并将原有元素复制到新的内存空间中，然后再将新元素添加到```vector```中。因此，在大量添加元素的情况下，频繁的内存分配和拷贝会影响性能，可以通过预先分配足够的空间或使用```reserve()```来提高性能。
 
-值类型限制：vector中存储的元素必须是具有复制构造函数和赋值运算符的类型，因为在
-vector的添加、删除、扩容等操作中会对元素进行拷贝或赋值操作。
+迭代器失效：当```vector```中的元素发生增删操作时，迭代器可能会失效，因为这些操作会导致```vector```的内存地址和元素顺序发生变化。因此，在使用迭代器时，需要避免在修改```vector```时使用过期的迭代器，可以在每次修改```vector```之后重新获取迭代器。
 
-插入和删除：vector提供了多种方法进行元素的插入和删除操作，如push_back()、
-pop_back()、insert()和erase()等。在使用这些操作时，需要注意其时间复杂度和效率，
-避免不必要的拷贝和移动操作。
+值类型限制：```vector```中存储的元素必须是具有复制构造函数和赋值运算符的类型，因为在```vector```的添加、删除、扩容等操作中会对元素进行拷贝或赋值操作。
 
-内存泄漏：如果vector中存储的元素是指针类型，需要注意在删除vector时，要手动释放指
-针指向的内存空间，避免内存泄漏。
+插入和删除：```vector```提供了多种方法进行元素的插入和删除操作，如```push_back()```、```pop_back()```、```insert()```和```erase()```等。在使用这些操作时，需要注意其时间复杂度和效率，避免不必要的拷贝和移动操作。
 
- ```
+内存泄漏：如果```vector```中存储的元素是指针类型，需要注意在删除```vector```时，要手动释放指针指向的内存空间，避免内存泄漏。
+
  ```Cpp{.line-numbers}
 template < class T , class Alloc = alloc>
 class vector {
@@ -123,53 +105,42 @@ try{
 调整迭代器指向新vector
  ```
 ## resize
-```cpp
-resize是用于更改向量的大小。如果向量的当前大小比resize指定的大小小，则将在向量的
-末尾添加新元素，以使其大小达到指定大小。如果当前大小大于resize指定的大小，则会删
-除多余的元素，使其大小达到指定大小。如果resize指定的大小等于向量的当前大小，则没
-有任何操作。
-```
- ```cpp
-当resize需要增加元素时，使用值初始化的默认值取决于元素类型。例如，如果vector中存
-储的是int类型，则新增的元素将被初始化为0；如果存储的是bool类型，则新增的元素将被
-初始化为false；如果存储的是std::string类型，则新增的元素将被初始化为空字符串。
- ```
+
+```resize```是用于更改向量的大小。如果向量的当前大小比```resize```指定的大小小，则将在向量的末尾添加新元素，以使其大小达到指定大小。如果当前大小大于resize指定的大小，则会删除多余的元素，使其大小达到指定大小。如果```resize```指定的大小等于向量的当前大小，则没有任何操作。
+
+当```resize```需要增加元素时，使用值初始化的默认值取决于元素类型。例如，如果vector中存储的是int类型，则新增的元素将被初始化为0；如果存储的是```bool```类型，则新增的元素将被初始化为```false```；如果存储的是```std::string```类型，则新增的元素将被初始化为空字符串。
+
  ```cpp
 vector<int> v;
 v.resize(5, 1); // 将向量大小设置为5，并用1初始化新增的元素
  ```
 ## reserve
-```cpp
-reserve(n) 函数用于为 vector 预留至少 n 个元素的内存空间，但不会改变 vector 的
-实际大小，也不会对 vector 中已有的元素进行初始化。在插入元素时，如果 vector 的实
-际大小超过了预留的内存空间，则仍然需要分配额外的内存空间。
-reserve 函数并不保证预留的空间足够容纳所有的元素，因为内存分配可能失败。
-可以搭配capacity得到容量大小，从而确定要预留的空间。
-```
+
+```reserve(n)``` 函数用于为 ```vector``` 预留至少 n 个元素的内存空间，但不会改变 ```vector``` 的实际大小，也不会对 ```vector``` 中已有的元素进行初始化。在插入元素时，如果 ```vector``` 的实际大小超过了预留的内存空间，则仍然需要分配额外的内存空间。```reserve``` 函数并不保证预留的空间足够容纳所有的元素，因为内存分配可能失败。可以搭配```capacity```得到容量大小，从而确定要预留的空间。
+
 ## resize 和 reserve 对比
-```cpp
-1. reserve 仅仅改变容器的容量，而不改变容器的大小；resize 则改变容器的大小。
 
-2. reserve 为容器预留空间，但不初始化新元素，也不改变容器的大小；resize 则不仅预
-留空间，还可以初始化新元素，或者截去多余的元素。
+1. ```reserve``` 仅仅改变容器的容量，而不改变容器的大小；
+	```resize``` 则改变容器的大小。
+	 
+2. ```reserve``` 为容器预留空间，但不初始化新元素，也不改变容器的大小；
+	```resize``` 则不仅预留空间，还可以初始化新元素，或者截去多余的元素。
 
-3. 在 reserve 调用之后，容器的大小仍然为 0，但是可以添加元素；在 resize 调用之
-后，容器的大小已经改变，可以访问新元素。
+3. 在 ```reserve``` 调用之后，容器的大小仍然为 0，但是可以添加元素；
+	在 ```resize``` 调用之后，容器的大小已经改变，可以访问新元素。
 
-4. reserve 只改变容器的容量，对于新增元素操作，如果容量不足，仍需要重新分配内
-存；resize 则根据需要增加或者缩小容器的容量，避免频繁的内存分配和释放。
+4. ```reserve``` 只改变容器的容量，对于新增元素操作，如果容量不足，仍需要重新分配内存；
+	```resize``` 则根据需要增加或者缩小容器的容量，避免频繁的内存分配和释放。
 
-5. 当向 std::vector 插入元素时，如果事先知道元素数量的范围，可以使用 reserve 提
-前分配足够的内存空间，从而避免插入元素时频繁的内存分配操作，提高性能；当需要动态
-地调整 std::vector 的大小时，可以使用 resize 改变容器的大小。
-```
+5. 当向 ```std::vector``` 插入元素时，如果事先知道元素数量的范围，可以使用 ```reserve``` 提前分配足够的内存空间，从而避免插入元素时频繁的内存分配操作，提高性能；当需要动态地调整 ```std::vector``` 的大小时，可以使用 ```resize``` 改变容器的大小。
+
 # bitset
-```cpp
-避免使⽤vector< bool >,⽤deque< bool >和bitset代替,因为vector并不容纳bool类型
-因为 vector<bool> 保存的是bits而不是bool,从而无法返回bool&
-std::bitset 的所有成员函数都是 constexpr：可以在常量表达式的计算中创建和使用 
-std::bitset 对象。
-```
+
+避免使⽤```vector< bool >```,⽤```deque< bool >```和```bitset```代替,因为```vector```并不容纳```bool```类型
+因为 ```vector<bool>``` 保存的是```bits```而不是```bool```,从而无法返回.
+
+```bool```&```std::bitset``` 的所有成员函数都是 ```constexpr```：可以在常量表达式的计算中创建和使用```std::bitset``` 对象。
+
 ```cpp
 //因为不是保存bool类型，test传入vector<bool>出错
 template <class T>
@@ -194,41 +165,34 @@ bt.none();	//检查是否没有为true的位
 bt.count();	//返回bt中为true的位数
 ```
 # list
- ```cpp
-list 为双向链表
-forward_list 为单向链表   //C++11
 
+```list``` 为双向链表
+```cpp
+ forward_list 为单向链表   //C++11
  #include<ext\slist> 下的 slist 跟 forward_list 一模一样
+ ```
+```slist``` 为 ```GNU C``` 中的，每放一个数据就开辟一个元素大小的空间
 
-slist 为 GNU C 中的每放一个数据就开辟一个元素大小的空间
-
-forward_list 没有 push_pack() ,只有 push_front()
+```forward_list``` 没有 ```push_pack()``` ,只有 ```push_front()```
 
 刻意在环状 list 尾端加一个空白节点, 以符合STL“前闭后开”区间
 
- ```
- ```cpp
-
 在使用list时需要注意以下几点：
 
-1. list是一个双向链表，因此插入、删除元素的时间复杂度为O(1)，但是访问元素的时间
-复杂度为O(n)。
+1. ```list```是一个双向链表，因此插入、删除元素的时间复杂度为O(1)，但是访问元素的时间复杂度为O(n)。
 
-2. list中的迭代器不支持随机访问，因此不能使用下标操作符[]，也不能使用算术运算符
-进行迭代器偏移。只能使用++、--等操作。
+2. ```list```中的迭代器不支持随机访问，因此不能使用下标操作符[]，也不能使用算术运算符进行迭代器偏移。只能使用++、--等操作。
 
 3. 在插入、删除元素时，要注意修改前后节点的指针，否则可能会出现指针错误。
 
-4. list的迭代器是不稳定的，如果在遍历list时对其中的元素进行删除或插入操作，可能
-会导致迭代器失效，因此应该避免在遍历时对list进行修改操作。
+4. ```list```的迭代器是不稳定的，如果在遍历```list```时对其中的元素进行删除或插入操作，可能会导致迭代器失效，因此应该避免在遍历时对```list```进行修改操作。
 
-5. list不支持随机访问，因此不能使用STL中的sort算法，需要使用自带的sort成员函数或
-者手动实现排序算法。
+5. ```list```不支持随机访问，因此不能使用STL中的```sort```算法，需要使用自带的```sort```成员函数或者手动实现排序算法。
 
-6. 如果需要在list中存储自定义类型的元素，需要重载元素类型的比较运算符。
+6. 如果需要在```list```中存储自定义类型的元素，需要重载元素类型的比较运算符。
 
-7. list提供了merge、splice、remove、unique等常用操作，可以大大简化对list的操作。
- ```
+7. ```list```提供了```merge```、```splice```、```remove```、```unique```等常用操作，可以大大简化对```list```的操作。
+
 ## merge()
  ```cpp
 void merge (list& x);
@@ -239,22 +203,19 @@ template <class Compare>
 void merge (list&& x, Compare comp);
  ```
 # deque
- ```cpp
-由一个个buffer构成，分段连续, 每次增长一个buffer大小的空间,
-buffer内连续, buffer分段不连续
 
-内部有一个vector, vector内的元素为指向buffer的指针, 当vector需要扩充时,
-是扩充为两倍, 把原来的放到值copy到中段, 可以向前和向后使用vector空间
+由一个个buffer构成，分段连续, 每次增长一个buffer大小的空间,buffer内连续, buffer分段不连续。
 
-如果push_back( a)把所在buffer空间用完, 则新分配一个缓冲区, 把指向其的
-指针放到vector中, 往前扩充同理
+内部有一个```vector```, ```vector```内的元素为指向buffer的指针, 当```vector```需要扩充时,是扩充为两倍, 把原来的放到值copy到中段, 可以向前和向后使用```vector```空间
 
-deque的iterator是一个class, 里面四个元素:cur, first, last, node
-first指向buffer头( 不是buffer内放的第一个元素)
-last指向buffer尾( 不是buffer内放的最后一个元素)
-cur指向buffer内的当前元素
-node指向vector中当前buffer的地址
- ```
+如果```push_back( a)```把所在buffer空间用完, 则新分配一个缓冲区, 把指向其的指针放到```vector```中, 往前扩充同理
+
+```deque```的```iterator```是一个class, 里面四个元素:cur, first, last, node
+1. first指向buffer头( 不是buffer内放的第一个元素)
+2. last指向buffer尾( 不是buffer内放的最后一个元素)
+3. cur指向buffer内的当前元素
+4. node指向```vector```中当前buffer的地址
+
 
  ```cpp{.line-numbers}
 tenmplate < class T, class Alloc = alloc, size_t BufSiz = 0>
@@ -364,18 +325,15 @@ bool empty() const{
  ```
 
 # stack / queue
-```cpp
-内部使用deque实现, 不提供iterator, 不能遍历
-queue不能用vector做底层结构, stack可以用vector做底层结构, 因为vector不能return front
-```
-# rb_tree
-```cpp
-rb_tree的遍历是中序遍历, 不应该使用iterator改变元素的值(但没有阻止更改),
-rb_tree为map和set服务, map可以改变data, key不可改
 
-rb_tree提供两种insertion操作: insert_unique()和insert_equal()
-前者表示key独一无二, 否则插入失败，后者表示key可以重复
- ```
+内部使用```deque```实现, 不提供```iterator```, 不能遍历```queue```不能用```vector```做底层结构, ```stack```可以用```vector```做底层结构, 因为```vector```不能return front
+
+# rb_tree
+
+rb_tree的遍历是中序遍历, 不应该使用```iterator```改变元素的值(但没有阻止更改),rb_tree为```map```和```set```服务, ```map```可以改变data, key不可改
+
+rb_tree提供两种insertion操作: ```insert_unique()```和```insert_equal()```前者表示key独一无二, 否则插入失败，后者表示key可以重复
+
  ```cpp
 template< class Key,	//关键字
 	class Value,	//关键字和data的组合, 而非data
@@ -436,31 +394,27 @@ unordered_set<string> wordSet( wordDict.begin(), wordDict.end());
 	//wordDict是容器，上述语句把wordDict中所有元素放入wordSet中
  ```
 ## set/multiset
- ```cpp
-rb-tree为底层, 元素有自动排序的特性, 排序的依据是key, value和key合而为一, 
-key就是value, 无法使用其iterators改变元素值( 因为key有其遵循的排列规则)
-其iterator是底部rb-tree的const iterator, 就是为了禁止user对元素的赋值
 
-set元素的key必须独一无二, 因此其insert()用的是rb_tree的insert_unique()
-multiset元素的key可以重复, 因此其insert()用的是rb_tree的insert_equal()
- ```
+rb-tree为底层, 元素有自动排序的特性, 排序的依据是key, value和key合而为一, key就是value, 无法使用其```iterators```改变元素值( 因为key有其遵循的排列规则)，其iterator是底部rb-tree的```const iterator```, 就是为了禁止user对元素的赋值
+
+```set```元素的key必须独一无二, 因此其```insert()```用的是rb_tree的```insert_unique()```
+```multiset```元素的key可以重复, 因此其```insert()```用的是rb_tree的```insert_equal()```
+
 ## map/multimap
- ```cpp
-把key变成const key, 和set差不多, 只不过value中有data
-map重载了[]操作符, 可以通过[key]来更改data的值( 使用lower_bound(key)来查
-找key的位置)
 
-lower_bound(key): 在已排序的[first, last)中找到key, 如果有key则返回找到的
-第一个值为key的元素位置, 如果没有则返回第一个不小于key的元素, 如果key大于所
-有元素, 则返回last
-lower_bound(key)返回key的位置或者最适合安插key的位置
+把key变成const key, 和```set```差不多, 只不过value中有data
+
+```map```重载了[]操作符, 可以通过[key]来更改data的值( 使用```lower_bound(key)```来查找key的位置)
+
+```lower_bound(key)```: 在已排序的[first, last)中找到key, 如果有key则返回找到的第一个值为key的元素位置, 如果没有则返回第一个不小于key的元素, 如果key大于所有元素, 则返回last 
+```lower_bound(key)```返回key的位置或者最适合安插key的位置
 
 使用[]做插入比直接使用insert()插入更慢
- ```
+
 ## unordered容器
- ```cpp
-unordered_map、unordered_set、unordered_multimap、unordered_multiset底层用hashtable实现
- ```
+
+```unordered_map```、```unordered_set```、```unordered_multimap```、```unordered_multiset```底层用```hashtable```实现
+
  ```cpp
 template <typename T, typename Hash = hash<T>,
 	typename EqPred = equal_to<T>, typename Allocator = allocator<T>>
@@ -484,11 +438,9 @@ template <typename Key, typename T, typename Hash = hash<T>,
 class unordered_multimap;
  ```
 # hashtable
- ```cpp
-可以使用hashtable iterators改变元素的data而不能改变key, hashtable使用key排序
-hashtable使用bucket vector, 如果元素个数比bucket多时, 把bucket数量增加两倍后
-附近的素数作为新的bucket数量
- ```
+
+可以使用```hashtable iterators```改变元素的data而不能改变key, ```hashtable```使用key排序```hashtable```使用```bucket vector```, 如果元素个数比bucket多时, 把bucket数量增加两倍后附近的素数作为新的bucket数量
+
  ```cpp
 template< class Value, class Key, class HashFcn, class ExtractKey,
 	class EqualKey, class Alloc = alloc>
@@ -536,19 +488,18 @@ hashtable<const char*, const char*, hash<const char*>,
 
  ```
 # BC++、VC++和GCC的allocator
- ```cpp
-只用operator new和operator delete完成allocate()和deallocate(), 
-没有特殊设计 
 
-GCC2.9的alloc使用了较少的cookie, 使用方法:
+只用```operator new```和```operator delete```完成```allocate()```和```deallocate()```, 没有特殊设计 
+
+```GCC2.9```的```alloc```使用了较少的cookie, 使用方法:
+```cpp
 vector< Type, __gnu_cxx::__pool_alloc<Type>>
- ```	
-# Algorithm
- ```cpp
-Algorithm看不见Containers, 对其一无所知; 它所需要的一切信息都要通过Iterator
-获得,而Iterator(由Containers提供)必须能够回答Algorithm的所有提问, 才能搭配该
-Algorithm的所有操作。 
  ```
+
+# Algorithm
+
+Algorithm看不见Containers, 对其一无所知; 它所需要的一切信息都要通过```iterator```获得,而```iterator```(由Containers提供)必须能够回答Algorithm的所有提问, 才能搭配该Algorithm的所有操作。 
+
 # Iterator
  ```cpp
 vector<int> iterator :: vi;
@@ -584,10 +535,10 @@ vector<int> iterator :: vi;
  ```	
 ## Iterator需要遵循的原则:
 ### iterator是泛化的指针	
- ```cpp
-Iterator Traits必须有能力分辨class iterators和non-class iterators
+
+```iterator Traits```必须有能力分辨```class iterators```和```non-class iterators```
 利用partial specialization可达到目标(不同的type有不同的traits)
- ```
+
  ```Cpp{.line-numbers}
 template<class I>
 struct iterator_traits {	//I是class iterator时
@@ -615,11 +566,11 @@ void algorithm(...){
 	1.iterator_category		2.difference_type 	3.value_type
 	4.reference_type		5.pointer_type
 #### 1.iterator_category(分类):
-    指的是Iterator的移动性质, 有的只能++, 有的只能--, 等等
+指的是```iterator```的移动性质, 有的只能++, 有的只能--, 等等
 #### 2.difference_type(距离):
-    指的是两个iterator之间距离的类型
+指的是两个```iterator```之间距离的类型
 #### 3.value_type
-    指的是变量的类型
+指的是变量的类型
 
 ### 各种容器的iterator的iterator_category
  ```cpp
@@ -640,11 +591,8 @@ struct random_access_iterator_tag: public bidirectional_iterator_tag{};
  ```
 
 # 杂记
- ```cpp
-除了array和vector以外, 所有容器的iterator都是class  
+
+除了```array```和```vector```以外, 所有容器的```iterator```都是class  
 所有容器内的元素都是前闭后开区间内
- ``` 
-```cpp
 不同容器要用不同的删除方法：
 1.删除容器中有特定值的所有对象
- ```
