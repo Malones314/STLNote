@@ -500,6 +500,107 @@ vector< Type, __gnu_cxx::__pool_alloc<Type>>
 
 Algorithm看不见Containers, 对其一无所知; 它所需要的一切信息都要通过```iterator```获得,而```iterator```(由Containers提供)必须能够回答Algorithm的所有提问, 才能搭配该Algorithm的所有操作。 
 
+## find_if
+用于在给定范围内查找第一个满足指定条件的元素，返回迭代器指向该元素。
+```cpp
+template<class InputIt, class UnaryPredicate>
+InputIt find_if(InputIt first, InputIt last, UnaryPredicate p);
+```
+InputIt 是输入迭代器的类型，表示要查找的范围，UnaryPredicate 是一元函数对象类型，描述要满足的条件。函数对象的返回值为 bool 类型。
+每次调用 p 函数对象，它会被传入当前迭代器指向的元素，返回值为 true 表示该元素满足条件，返回值为 false 表示该元素不满足条件。find_if 将从 first 开始逐个迭代器调用 p，直到找到第一个满足条件的元素，或者到达 last 端点。
+
+```cpp
+//使用 find_if 在 vector 中查找第一个偶数，并打印其值
+std::vector<int> nums = {1, 3, 2, 5, 4, 7, 6};
+auto it = std::find_if(nums.begin(), nums.end(), [](int x){ 
+	return x % 2 == 0; 
+});
+if (it != nums.end()) {
+	std::cout << "First even number found is: " << *it << std::endl;
+		//First even number found is: 2
+} else {
+	std::cout << "No even number found!" << std::endl;
+}
+```
+## lower_bound
+用于在有序序列中查找第一个**大于等于**给定值的元素的迭代器。 如果找到了该元素，它将返回该元素的迭代器；如果未找到，它将返回序列的末尾迭代器。
+```cpp
+template <class ForwardIterator, class T>
+ForwardIterator lower_bound (ForwardIterator first, ForwardIterator last, const T& val);
+```
+first 和 last 分别是指向有序序列起始位置和终止位置的迭代器，val 是要查找的值。
+时间复杂度为 O(log n)。
+
+```cpp
+//有序数组 arr，并且想要查找第一个大于等于给定值 x 的元素在数组中的下标
+int idx = lower_bound(arr.begin(), arr.end(), x) - arr.begin();
+```
+
+## upper_bound
+用于在有序序列中查找第一个**大于**给定值的元素的迭代器。如果找到了该元素，它将返回该元素的迭代器；如果未找到，它将返回序列的末尾迭代器。
+```cpp
+template <class ForwardIterator, class T>
+ForwardIterator upper_bound (ForwardIterator first, ForwardIterator last, const T& val);
+```
+first 和 last 分别是指向有序序列起始位置和终止位置的迭代器，val 是要查找的值。
+时间复杂度为 O(log n)。
+```cpp
+//有序数组 arr，并且想要查找第一个大于给定值 x 的元素在数组中的下标
+int idx = upper_bound(arr.begin(), arr.end(), x) - arr.begin();
+```
+# less<T>
+```less<T>``` 是 STL 中的一个函数对象，通常用于比较两个元素是否满足某种排序关系。
+要确保```less<T>```和```operator<```具有相同的语义
+ ```cpp
+#include <iostream>
+#include <algorithm>
+#include <functional>	//less<T>
+using namespace std;
+int main() {
+    int arr[5] = {3, 1, 4, 2, 5};
+    sort(arr, arr + 5, less<int>());
+    for (int i = 0; i < 5; i++) {
+        cout << arr[i] << " ";	
+    }	//1 2 3 4 5
+    return 0;
+}
+```
+```cpp
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <functional>
+
+using namespace std;
+
+struct Person {
+	string name;
+	int age;
+};
+bool compareByAge(const Person& p1, const Person& p2) {
+	return p1.age < p2.age;
+}
+int main() {
+	Person p1 = {"Bob", 30};
+	Person p2 = {"Alice", 20};
+	Person p3 = {"John", 25};
+	Person people[] = {p1, p2, p3};
+
+	sort(people, people + 3, less<>()(compareByAge));
+
+	for (int i = 0; i < 3; i++) {
+		cout << people[i].name << " " << people[i].age << endl;
+	}
+	//输出：
+	//Alice 20
+	//John 25
+	//Bob 30
+
+	return 0;
+}
+```
+使用 ```less<>()(compareByAge)``` 调用 ```sort()``` 时，```less<>()``` 的作用是表示按照第一个参数小于第二个参数的方式来排序，而实际的比较方式是根据我们自定义的 ```compareByAge函数``` 来进行比较的。
+
 # Iterator
  ```cpp
 vector<int> iterator :: vi;
