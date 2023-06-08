@@ -194,13 +194,35 @@ bt.count();	//返回bt中为true的位数
 7. ```list```提供了```merge```、```splice```、```remove```、```unique```等常用操作，可以大大简化对```list```的操作。
 
 ## merge()
- ```cpp
-void merge (list& x);
-void merge (list&& x);
-template <class Compare>
-void merge (list& x, Compare comp);
-template <class Compare>
-void merge (list&& x, Compare comp);
+用于将两个已经排好序的容器合并成一个排好序的容器。
+```cpp
+template<class InputIt1, class InputIt2, class OutputIt>
+OutputIt merge(InputIt1 first1, InputIt1 last1,
+                InputIt2 first2, InputIt2 last2,
+                OutputIt d_first);
+```
+first1和last1表示第一个区间的起始位置和结束位置，first2和last2表示第二个区间的起始位置和结束位置，d_first表示合并后的结果存放的位置。
+
+函数会将这两个区间的元素从小到大依次合并到目标区间中，保持元素的有序性。注意，输入的两个区间必须是已经排好序的。
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+int main() {
+	std::vector<int> v1 = {1, 3, 5, 7, 9};
+	std::vector<int> v2 = {2, 4, 6, 8, 10};
+
+	std::vector<int> merged(10);
+
+	std::merge(v1.begin(), v1.end(), v2.begin(), v2.end(), merged.begin());
+
+	for (const auto& i : merged) {
+		std::cout << i << " ";
+	}
+	//1 2 3 4 5 6 7 8 9 10
+    return 0;
+}
  ```
 # deque
 
